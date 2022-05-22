@@ -1,7 +1,6 @@
 package ru.olmart.service;
 
 import ru.olmart.model.User;
-
 import java.util.List;
 
 public interface UserService {
