@@ -6,6 +6,10 @@ import java.sql.SQLException;
 
 public class Util {
     // реализуйте настройку соеденения с БД
+    private static final String HOST_NAME = "localhost";
+    private static final String DB_NAME = "kata";
+    private static final String USER_NAME = "root";
+    private static final String PASSWORD = "1234qwer";
     private static Connection connection = null;
 
     private Util () {
@@ -16,17 +20,9 @@ public class Util {
         if (connection != null) {
             return connection;
         }
-        String hostName = "localhost";
-        String dbName = "kata";
-        String userName = "root";
-        String password = "1234qwer";
-        return getMySQLConnection(hostName, dbName, userName, password);
-    }
-
-    public static Connection getMySQLConnection (String hostName, String dbName, String userName, String password) {
         try {
-            String connectionURL = "jdbc:mysql://" + hostName + ":3306/" + dbName;
-            connection = DriverManager.getConnection(connectionURL, userName, password);
+            String connectionURL = "jdbc:mysql://" + HOST_NAME + ":3306/" + DB_NAME;
+            connection = DriverManager.getConnection(connectionURL, USER_NAME, PASSWORD);
         } catch (SQLException e) {
             e.printStackTrace();
         }
