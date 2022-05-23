@@ -12,12 +12,16 @@ import java.util.Properties;
 public class Util {
     // реализуйте настройку соеденения с БД
     private static Connection connection = null;
+    private static Session session = null;
 
     private Util () {
 
     }
 
     public static Session getSession() {
+        if (session != null) {
+            return session;
+        }
         Properties properties = new Properties();
 
         properties.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/kata");
@@ -25,11 +29,12 @@ public class Util {
 
         properties.setProperty("hibernate.connection.username", "root");
         properties.setProperty("hibernate.connection.password", "1234qwer");
-        properties.setProperty("hibernate.connection.driver_class", "com.musql.jdbc.Driver");
-        properties.setProperty("show_sql", true); //If you wish to see the generated sql query
+        properties.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
+        properties.setProperty("show_sql", "true"); //If you wish to see the generated sql query
 
         SessionFactory sessionFactory = new Configuration().addProperties(properties).buildSessionFactory();
         Session session = sessionFactory.openSession();
+        //Session session1 = sessionFactory.getCurrentSession(); //todo так у трегулова, понять разницу с open
         //session.beginTransaction();  //todo вынести в дао
 
         return session;

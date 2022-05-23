@@ -1,12 +1,14 @@
 package ru.olmart.service;
 
 import ru.olmart.dao.UserDao;
+import ru.olmart.dao.UserDaoHibernateImpl;
 import ru.olmart.dao.UserDaoJDBCImpl;
 import ru.olmart.model.User;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
-    private final UserDao userDao = new UserDaoJDBCImpl();
+//    private final UserDao userDao = new UserDaoJDBCImpl();
+    private final UserDao userDao = new UserDaoHibernateImpl();
 
     @Override
     public void createUsersTable() {
