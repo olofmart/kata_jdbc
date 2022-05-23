@@ -1,8 +1,13 @@
 package ru.olmart.util;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class Util {
     // реализуйте настройку соеденения с БД
@@ -10,6 +15,24 @@ public class Util {
 
     private Util () {
 
+    }
+
+    public static Session getSession() {
+        Properties properties = new Properties();
+
+        properties.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/kata");
+        properties.setProperty("dialect", "org.hibernate.dialect.MySQLDialect");
+
+        properties.setProperty("hibernate.connection.username", "root");
+        properties.setProperty("hibernate.connection.password", "1234qwer");
+        properties.setProperty("hibernate.connection.driver_class", "com.musql.jdbc.Driver");
+        properties.setProperty("show_sql", true); //If you wish to see the generated sql query
+
+        SessionFactory sessionFactory = new Configuration().addProperties(properties).buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        //session.beginTransaction();  //todo вынести в дао
+
+        return session;
     }
 
     public static Connection getMySQLConnection() {
