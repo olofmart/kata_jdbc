@@ -1,12 +1,14 @@
 package ru.olmart;
 
 import ru.olmart.dao.UserDao;
+import ru.olmart.dao.UserDaoHibernateImpl;
 import ru.olmart.dao.UserDaoJDBCImpl;
 
 public class Main {
     public static void main(String[] args) {
         // реализуйте алгоритм здесь
-        UserDao userDao = new UserDaoJDBCImpl();
+        //UserDao userDao = new UserDaoJDBCImpl();
+        UserDao userDao = new UserDaoHibernateImpl();
 
         userDao.createUsersTable();
 
