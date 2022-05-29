@@ -1,8 +1,13 @@
 package ru.olmart.dao;
 
+import org.hibernate.HibernateException;
+import org.hibernate.JDBCException;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import ru.olmart.model.User;
 import ru.olmart.util.Util;
+
+import java.sql.SQLException;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
@@ -33,40 +38,72 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        Session session = Util.getSessionFactory().openSession();
-        User user = new User(name,lastName,age);
-        session.beginTransaction();
-        session.save(user);
-        session.getTransaction().commit();
-        session.close();
+        Session session = null;
+        try {
+            session = Util.getSessionFactory().openSession();
+            User user = new User(name,lastName,age);
+            session.beginTransaction();
+            session.save(user);
+            session.getTransaction().commit();
+        } catch (HibernateException e){
+            session.getTransaction().rollback();
+            e.printStackTrace();
+        } finally {
+        if (session != null) session.close();
+    }
     }
 
     @Override
     public void removeUserById(long id) {
-        Session session = Util.getSessionFactory().openSession();
-        session.beginTransaction();
-        session.delete(session.get(User.class, id));
-        session.getTransaction().commit();
-        session.close();
+        Session session = null;
+        try {
+            session = Util.getSessionFactory().openSession();
+            session.beginTransaction();
+            session.delete(session.get(User.class, id));
+            session.getTransaction().commit();
+            session.close();
+        } catch (HibernateException e) {
+            session.getTransaction().rollback();
+            e.printStackTrace();
+        } finally {
+            if (session != null) session.close();
+        }
     }
 
     @Override
     public List<User> getAllUsers() {
-        Session session = Util.getSessionFactory().openSession();
-        session.beginTransaction();
-        List<User> usersList = session.createQuery("from User").getResultList();
-        session.getTransaction().commit();
-        session.close();
+        Session session = null;
+        List<User> usersList = null;
+        try {
+            session = Util.getSessionFactory().openSession();
+            session.beginTransaction();
+            usersList = session.createQuery("from User").getResultList();
+            session.getTransaction().commit();
+            session.close();
+        } catch (HibernateException e) {
+            session.getTransaction().rollback();
+            e.printStackTrace();
+        } finally {
+            if (session != null) session.close();
+        }
         return usersList;
     }
 
     @Override
     public void cleanUsersTable() {
-        Session session = Util.getSessionFactory().openSession();
-        session.beginTransaction();
-        session.createQuery("delete from User").executeUpdate();
-        session.getTransaction().commit();
-        session.close();
+        Session session = null;
+        try {
+            session = Util.getSessionFactory().openSession();
+            session.beginTransaction();
+            session.createQuery("delete from User").executeUpdate();
+            session.getTransaction().commit();
+            session.close();
+        } catch (HibernateException e) {
+            session.getTransaction().rollback();
+            e.printStackTrace();
+        } finally {
+            if (session != null) session.close();
+        }
     }
 }
 
